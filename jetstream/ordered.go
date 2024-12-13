@@ -504,6 +504,11 @@ func (c *orderedConsumer) Next(opts ...FetchOpt) (Msg, error) {
 	}
 	msg := <-res.Messages()
 	if msg != nil {
+		meta, err := msg.Metadata()
+		if err != nil {
+			return nil, err
+		}
+		fmt.Printf("Received msg with meta: stream_seq: %d; consumer: %s\n", meta.Sequence.Stream, c.currentConsumer.CachedInfo().Name)
 		return msg, nil
 	}
 	if res.Error() == nil {
@@ -547,6 +552,7 @@ func (c *orderedConsumer) reset() error {
 
 	c.cursor.deliverSeq = 0
 	consumerConfig := c.getConsumerConfig()
+	fmt.Printf("Creating consumer: start seq: %d; consumer: %s\n", consumerConfig.OptStartSeq, consumerConfig.Name)
 
 	var err error
 	var cons Consumer
