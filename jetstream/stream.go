@@ -113,8 +113,7 @@ type (
 
 		// CreateOrUpdatePushConsumer creates a push consumer on a given stream with
 		// given config. If consumer already exists, it will be updated (if
-		// possible). Consumer interface is returned, allowing to operate on a
-		// consumer (e.g. fetch messages).
+		// possible). Consumer interface is returned, allowing to consume messages.
 		CreateOrUpdatePushConsumer(ctx context.Context, cfg ConsumerConfig) (PushConsumer, error)
 
 		// CreatePushConsumer creates a push consumer on a given stream with given
@@ -291,8 +290,7 @@ func (s *stream) UpdateConsumer(ctx context.Context, cfg ConsumerConfig) (Consum
 
 // CreateOrUpdatePushConsumer creates a consumer on a given stream with
 // given config. If consumer already exists, it will be updated (if
-// possible). Consumer interface is returned, allowing to operate on a
-// consumer (e.g. fetch messages).
+// possible). Consumer interface is returned, allowing to consume messages.
 func (s *stream) CreateOrUpdatePushConsumer(ctx context.Context, cfg ConsumerConfig) (PushConsumer, error) {
 	return upsertPushConsumer(ctx, s.jetStream, s.name, cfg, consumerActionCreateOrUpdate)
 }
@@ -302,14 +300,14 @@ func (s *stream) CreateOrUpdatePushConsumer(ctx context.Context, cfg ConsumerCon
 // differs from its configuration, ErrConsumerExists is returned. If the
 // provided configuration is the same as the existing consumer, the
 // existing consumer is returned. Consumer interface is returned,
-// allowing to operate on a consumer (e.g. fetch messages).
+// allowing to consume messages.
 func (s *stream) CreatePushConsumer(ctx context.Context, cfg ConsumerConfig) (PushConsumer, error) {
 	return upsertPushConsumer(ctx, s.jetStream, s.name, cfg, consumerActionCreate)
 }
 
 // UpdatePushConsumer updates an existing consumer. If consumer does not
 // exist, ErrConsumerDoesNotExist is returned. Consumer interface is
-// returned, allowing to operate on a consumer (e.g. fetch messages).
+// returned, allowing to consume messages.
 func (s *stream) UpdatePushConsumer(ctx context.Context, cfg ConsumerConfig) (PushConsumer, error) {
 	return upsertPushConsumer(ctx, s.jetStream, s.name, cfg, consumerActionUpdate)
 }
